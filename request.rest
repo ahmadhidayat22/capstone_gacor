@@ -1,0 +1,30 @@
+
+GET http://localhost:5000/api/v1/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0clNjZF8xbi13Ri1GSndiIiwidXNlcm5hbWUiOiJ1c2VyIiwiZW1haWwiOiJlbWFpbEBnbWFpbC5jb20iLCJpYXQiOjE3MzEzNTM2ODAsImV4cCI6MTczMTM1MzY5NX0.Nv8Aq7wtS0lWnEs5MOtSj8ew37VZ_XSjXmihCC0GEtg
+
+
+###
+POST http://localhost:5000/api/v1/register
+content-Type : application/json
+
+{
+    "username": "user",
+    "email": "email@gmail.com",
+    "password": "123",
+    "confPassword": "123"
+}
+
+###
+POST http://localhost:5000/api/v1/login
+Content-Type: application/json
+
+{
+  "email":"email@gmail.com",
+  "password": "123"
+}
+
+###
+GET http://localhost:5000/api/v1/token
+
+###
+GET http://localhost:5000/api/v1/test-delay
