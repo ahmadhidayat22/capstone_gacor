@@ -36,9 +36,14 @@ app.use((req, res, next) => {
 
 app.use(cookieParser());
 app.use(express.json());
+app.use((req,res, next) => {
+  console.log(`${req.method} ${req.path} FROM ${req.hostname} `);
+  next();
+})
 app.get('/', (req,res) => {
   res.send("<h1> Server is running, Try to see <a href= '/api/docs'>documentation </a> </h1>");
 })
+
 app.use("/api/v1/",router)
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
