@@ -175,7 +175,7 @@ components:
         password:
           type: string
           format: password
-        confirm Password :
+        confPassword:
           type: string
           format: password
 
