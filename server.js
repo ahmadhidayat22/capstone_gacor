@@ -12,6 +12,7 @@ const swaggerDocument = yaml.load('./swagger.yaml');
 
 const app = express();
 const port = process.env.PORT || 3000;
+
 try {
     await db.authenticate();
     // await Users.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
