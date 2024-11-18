@@ -1,0 +1,193 @@
+openapi: 3.0.0
+info:
+  title: Backend API Nutrisee App
+  description: All basic API endpoint for Nutrisee App
+  version: 1.0.0
+  termsOfService: /terms-of-use
+# Relative URL to external documentation
+externalDocs:
+  url: /docs
+  description: Find more info here
+  
+servers:
+  # - url: http://localhost:5000/api/v1
+  #   description: main url production server
+  - url: http://localhost:5000/api/v1/
+    description: Staging server for testing
+
+
+
+paths:
+  /users:
+    get:
+      summary: Mendapatkan daftar pengguna
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Daftar pengguna berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Tidak diotorisasi
+
+  /register:
+    post:
+      summary: Mendaftarkan pengguna baru
+      tags:
+        - Users
+      requestBody:
+        description: Data pengguna untuk pendaftaran
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '201':
+          description: Pengguna berhasil terdaftar
+        '400':
+          description: password dan confirm password tidak cocok, username atau email sudah terdaftar
+
+  /login:
+    post:
+      summary: Login pengguna
+      tags:
+        - Auth
+      requestBody:
+        description: Data login pengguna
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Login berhasil
+        '400':
+          description: Password salah
+        '404':
+          description: email tidak ditemukan
+
+  /token:
+    get:
+      summary: Refresh token untuk sesi pengguna
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Token berhasil diperbarui
+        '401':
+          description: Refresh token tidak valid
+        '403': 
+          description: Tidak diotorisasi
+
+  /auth/google:
+    get:
+      summary: Login dengan Google
+      tags: 
+        - Auth
+      responses:
+        '203':
+          description: Redirect ke link login google 
+        
+  /auth/google/callback:
+    get:
+      
+      summary: Callback setelah login dengan Google
+      parameters:
+        - in: path
+          name: code
+          required: true
+          description: Code dari Google
+          schema:
+            type: string        
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Login berhasil
+        '400':
+          description: Gagal Login
+        '500':
+          description: Failed to exchange token
+
+  /logout:
+    delete:
+      summary: Logout pengguna
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Logout berhasil
+        '204':
+          description: Refresh token tidak ditemukan
+        '401':
+          description: Tidak diotorisasi
+
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        refresh_token:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt :
+          type: string
+          format: date-time
+
+    UserRegistration:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          example: "Ahmad"
+        email:
+          type: string
+          example: "ahmad@example.com"
+        password:
+          type: string
+          format: password
+        confirm Password :
+          type: string
+          format: password
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: "ahmad@example.com"
+        password:
+          type: string
+          format: password

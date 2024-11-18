@@ -1,6 +1,6 @@
 
-GET http://localhost:5000/api/v1/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0clNjZF8xbi13Ri1GSndiIiwidXNlcm5hbWUiOiJ1c2VyIiwiZW1haWwiOiJlbWFpbEBnbWFpbC5jb20iLCJpYXQiOjE3MzEzNTM2ODAsImV4cCI6MTczMTM1MzY5NX0.Nv8Aq7wtS0lWnEs5MOtSj8ew37VZ_XSjXmihCC0GEtg
+GET http://localhost:5000/api/v1/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InFLZnkxLXFlYUVJbDhNeE4iLCJ1c2VybmFtZSI6IkFtd2F5IiwiZW1haWwiOiJhbXdheTg1MzFAZ21haWwuY29tIiwiaWF0IjoxNzMxNzQ3MjE2LCJleHAiOjE3MzE3NDcyNDZ9.Grmy9pprt_KHZR17KrlUJn7J_aDjL8yCM2qx-3J2OBk
 
 
 ###
@@ -28,3 +28,6 @@ GET http://localhost:5000/api/v1/token
 
 ###
 GET http://localhost:5000/api/v1/test-delay
+
+###
+GET http://localhost:5000/api/v1/auth/google
