@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 app.use(express.json());
 app.use((req,res, next) => {
-  console.log(`${req.method} ${req.path} FROM ${req.hostname} `);
+  console.log(`${req.method} ${req.path} FROM ${req.ip} - Source: ${req.get('user-agent')}`);
   next();
 })
 app.get('/', (req,res) => {
