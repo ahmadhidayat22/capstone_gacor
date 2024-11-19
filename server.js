@@ -10,7 +10,7 @@ import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 let swaggerDocument = yaml.load('./swagger.yaml');
 const url = process.env.BASE_URL || 'localhost:5000/api/v1'; // Set url 
-swaggerDocument.servers = [{ url: url, description: 'API URL' }]
+swaggerDocument.servers = [{ url: url, description: 'Stagging api URL' }]
 
 const app = express();
 const port = process.env.PORT || 3000;
