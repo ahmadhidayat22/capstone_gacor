@@ -9,11 +9,11 @@ externalDocs:
   url: /docs
   description: Find more info here
   
-servers:
-  # - url: http://localhost:5000/api/v1
-  #   description: main url production server
-  - url: http://47.236.141.252:5000/api/v1/
-    description: Staging server for testing
+# servers:
+#   # - url: http://localhost:5000/api/v1
+#   #   description: main url production server
+#   - url: ${SERVER_URL}/api/v1/
+#     description: Staging server for testing
 
 
 
