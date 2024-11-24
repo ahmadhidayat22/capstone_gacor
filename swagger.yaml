@@ -12,7 +12,7 @@ externalDocs:
 servers:
   # - url: http://localhost:5000/api/v1
   #   description: main url production server
-  - url: http://47.236.141.252:5000/api/v1/
+  - url: http://localhost:5000/api/v1
     description: Staging server for testing
 
 
@@ -118,6 +118,25 @@ paths:
         '500':
           description: Failed to exchange token
 
+  /news:
+    get:
+      summary: Mengambil daftar berita dari API eksternal dan menambahkannya datanya kedatabase atau mengambil data dari cadangan database
+      tags:
+        - News
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Berita berhasil diambil dari API eksternal atau cadangan database. Jika API gagal, data diambil dari database.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/News'
+        '500':
+          description: Gagal mengambil data berita dari API eksternal maupun database cadangan
+
   /logout:
     delete:
       summary: Logout pengguna
@@ -191,3 +210,29 @@ components:
         password:
           type: string
           format: password
+    
+    News:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Kesehatan Mental di Tengah Pandemi"
+        description:
+          type: string
+          example: "Pandemi telah mempengaruhi kesehatan mental masyarakat. Artikel ini membahas dampaknya."
+        source:
+          type: string
+          example: "BBC News"
+        date_published:
+          type: string
+          format: date-time
+          example: "2024-11-24T10:00:00Z"
+        url:
+          type: string
+          example: "https://www.bbc.com/health-article"
+        image:
+          type: string
+          example: "https://www.bbc.com/health-image.jpg"
+        category:
+          type: string
+          example: "health"

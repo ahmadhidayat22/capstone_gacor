@@ -12,10 +12,12 @@ import {
 
 import { verifyToken } from '../middleware/VerifyToken.js';
 import { refreshToken } from '../controller/RefreshToken.js';
+import { fetchNews } from '../controller/NewsController.js';
 
 const router = express.Router();
 
 
+router.get('/news', verifyToken, fetchNews);
 router.get('/users',verifyToken, getUser);
 router.post('/register', Register);
 router.post('/login', Login);

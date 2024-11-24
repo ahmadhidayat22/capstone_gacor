@@ -1,6 +1,7 @@
 import express from 'express';
 import db  from './config/Database.js';
 import Users from './models/UserModel.js';
+import News from './models/NewsModel.js';
 import router from './routes/index.js'
 import dotenv from 'dotenv';
 dotenv.config();
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3000;
 try {
     await db.authenticate();
     // await Users.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
+    // await News.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
     
     console.log('database Connected')
 } catch (error) {
