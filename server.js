@@ -1,26 +1,34 @@
-import express from 'express';
-import db  from './config/Database.js';
 import Users from './models/UserModel.js';
 import News from './models/NewsModel.js';
+import PasswordReset from './models/PasswordReset.js'
+
+
+import express from 'express';
+import db  from './config/Database.js';
 import router from './routes/index.js'
 import dotenv from 'dotenv';
 dotenv.config();
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'yamljs';
-import rateLimit from 'express-rate-limit';
+// import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import { softLimiter } from './middleware/limiter.js';
+import  AuditLog  from './utils/auditLog.js';
+
 let swaggerDocument = yaml.load('./swagger.yaml');
 const url = process.env.BASE_URL || 'localhost:5000/api/v1'; // Set url 
 swaggerDocument.servers = [{ url: url, description: 'Stagging api URL' }]
 
 const app = express();
 const port = process.env.PORT || 3000;
+app.set('view engine', 'ejs');
 
 try {
     await db.authenticate();
     // await Users.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
     // await News.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
+    // await PasswordReset.sync();
     
     console.log('database Connected')
 } catch (error) {
@@ -30,22 +38,7 @@ try {
 }
 
 
-const limiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 minutes
-  max: 20, 
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  // message: "Terlalu banyak permintaan dari IP ini, coba lagi nanti.",
-  handler: (req,res) => {
-      // bannedIps.add(req.ip);
-      console.log(`Permintaan dari IP: ${req.ip} melebihi batas`);
-      res.status(429).json({
-          error: 'Terlalu banyak permintaan dari IP ini, coba lagi nanti'
-      })
-  }
-
-})
-app.use(limiter);
+app.use(softLimiter);
 app.use((req, res, next) => {
     res.setTimeout(10000, () => { // timeout 5 detik
       res.status(503).json({ message: "Permintaan timeout. Silakan coba lagi." });
@@ -56,20 +49,25 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
-app.use((req,res, next) => {
-  const now = new Date();
-  const formattedDate = now.toLocaleString('en-US', { 
-    year: 'numeric', 
-    month: '2-digit', 
-    day: '2-digit', 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit', 
-    hour12: false 
-  });
-  console.log(`${req.method} ${req.path} FROM ${req.ip} TIME: ${formattedDate} - SOURCE: ${req.get('user-agent')}`);
-  next();
-})
+
+app.use(AuditLog);
+
+// app.use((req,res, next) => {
+//   const now = new Date();
+//   const formattedDate = now.toLocaleString('en-US', { 
+//     year: 'numeric', 
+//     month: '2-digit', 
+//     day: '2-digit', 
+//     hour: '2-digit', 
+//     minute: '2-digit', 
+//     second: '2-digit', 
+//     hour12: false 
+//   });
+//   console.log(`${req.method} ${req.path} FROM ${req.headers['x-real-ip'] ||req.headers['x-forwarded-for']?.split(',')[0] || req.ip}  TIME: ${formattedDate} - SOURCE: ${req.get('user-agent')}`);
+//   next();
+// })
+app.use(express.urlencoded({ extended: true }));
+
 app.get('/', (req,res) => {
   res.send(" <a href= '/api/docs'>documentation </a>");
 })

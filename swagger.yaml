@@ -18,24 +18,46 @@ servers:
 
 
 paths:
-  /users:
+  /profile:
     get:
-      summary: Mendapatkan daftar pengguna
+      summary: Mendapatkan profil pengguna
       tags:
         - Users
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Daftar pengguna berhasil diambil
+          description: informasi pengguna berhasil diambil
           content:
             application/json:
               schema:
-                type: array
+                type: object
                 items:
                   $ref: '#/components/schemas/User'
         '401':
+          description: Refresh token tidak valid
+        '403':
           description: Tidak diotorisasi
+
+
+  # /users:
+  #   get:
+  #     summary: Mendapatkan daftar pengguna
+  #     tags:
+  #       - Users
+  #     security:
+  #       - bearerAuth: []
+  #     responses:
+  #       '200':
+  #         description: Daftar pengguna berhasil diambil
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/User'
+  #       '401':
+  #         description: Tidak diotorisasi
 
   /register:
     post:
@@ -117,6 +139,39 @@ paths:
           description: Gagal Login
         '500':
           description: Failed to exchange token
+  /forgot-password:
+    post:
+        summary: Mengirimkan email permintaan reset password
+        tags:
+          - Auth
+        parameters:
+          - in: query
+            name: email
+            required: true
+            description: Email pengguna
+            schema:
+              type: string
+              
+        responses:
+          '200':
+            description: Logout berhasil
+          '204':
+            description: Refresh token tidak ditemukan
+          '401':
+            description: Tidak diotorisasi
+  /logout:
+    delete:
+      summary: Logout pengguna
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Logout berhasil
+        '204':
+          description: Refresh token tidak ditemukan
+        '401':
+          description: Tidak diotorisasi
+
 
   /news:
     get:
@@ -137,19 +192,7 @@ paths:
         '500':
           description: Gagal mengambil data berita dari API eksternal maupun database cadangan
 
-  /logout:
-    delete:
-      summary: Logout pengguna
-      tags:
-        - Auth
-      responses:
-        '200':
-          description: Logout berhasil
-        '204':
-          description: Refresh token tidak ditemukan
-        '401':
-          description: Tidak diotorisasi
-
+  
 
 
 components:
