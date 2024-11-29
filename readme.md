@@ -25,3 +25,12 @@ npm install
 
 ### Environment Variable Configuration
 Create a ```.env``` file in the project root, add the configuration according to the configuration in ```.env.example```
+
+### Run Server
+```bash 
+npm start
+```
+
+
+## Support  
+For support, email nutriisee@gmail.com  
