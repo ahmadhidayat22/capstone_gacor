@@ -5,7 +5,7 @@ export const fetchNews = async (req, res) => {
     try {
         const response = await axios.get('http://api.mediastack.com/v1/news', {
             params: {
-                access_key: '569799d8c58f348ab93b673cbb2a806c',
+                access_key: process.env.MEDIASTACK_ACCESS_KEY,
                 categories: 'health',
                 countries: 'us,gb',
             }
