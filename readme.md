@@ -18,8 +18,8 @@ follow these steps to run this project locally:
 
 ### Clone Repository
 ``` bash
-git clone https://github.com/username/nutrisee-backend.git
-cd nutrisee-backend
+git clone https://github.com/ahmadhidayat22/capstone_gacor.git
+cd capstone_gacor
 npm install
 ```
 
