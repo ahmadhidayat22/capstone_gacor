@@ -11,17 +11,17 @@ export const fetchNews = async (req, res) => {
             }
         });
         const newsData = response.data.data;
-        for (const news of newsData) {
-            await News.create({
-                title: news.title,
-                description: news.description,
-                source: news.source,
-                date_published: news.published_at,
-                url: news.url,
-                image: news.image,
-                category: news.category
-            });
-        }
+        // for (const news of newsData) {
+        //     await News.create({
+        //         title: news.title,
+        //         description: news.description,
+        //         source: news.source,
+        //         date_published: news.published_at,
+        //         url: news.url,
+        //         image: news.image,
+        //         category: news.category
+        //     });
+        // }
         return res.status(200).json(newsData);
 
     } catch (error) {

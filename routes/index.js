@@ -20,7 +20,7 @@ import { hardLimiter } from '../middleware/limiter.js';
 const router = express.Router();
 
 
-router.get('/news', verifyToken, fetchNews);
+router.get('/news', fetchNews);
 router.get('/users',verifyToken, getUser);
 router.get('/profile', verifyToken, profile)
 router.post('/register', Register);
