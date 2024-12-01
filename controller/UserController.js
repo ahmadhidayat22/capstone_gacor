@@ -379,7 +379,8 @@ const resetPassword = async(req,res) => {
 
 
 const logout = async(req,res) => {
-    const refreshToken = req.cookies.refreshToken;
+    const { refreshToken }= req.body;
+
     if(!refreshToken) return res.sendStatus(204);
     const user = await Users.findAll({
         where:{

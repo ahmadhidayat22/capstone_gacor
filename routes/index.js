@@ -25,7 +25,7 @@ router.get('/users',verifyToken, getUser);
 router.get('/profile/:id', profile)
 router.post('/register', Register);
 router.post('/login', Login);
-router.get('/token', refreshToken);
+router.post('/token', refreshToken);
 router.get('/auth/google', redirectOauthLogin);
 router.get('/auth/google/callback', callbackOauthLogin);
 
