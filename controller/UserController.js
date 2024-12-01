@@ -36,7 +36,8 @@ const profile = async(req,res) => {
 
         res.status(200).json({data: user})
     } catch (error) {
-        
+        console.error(error);
+        res.status(500).json({message: "server error"})
     }
 }
 
@@ -107,7 +108,7 @@ const Login = async(req, res) => { // login with email and password only , modif
         const username = user[0].username;
         const email = user[0].email;
         const accessToken = jwt.sign({userId,username,email}, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: '30s'
+            expiresIn: '1h'
         })
 
         const refreshToken = jwt.sign({userId,username,email}, process.env.REFRESH_TOKEN_SECRET, {
@@ -392,7 +393,7 @@ const logout = async(req,res) => {
             id: userId
         }
     })
-    res.clearCookie('refreshToken');
+    // res.clearCookie('refreshToken');
     
     return res.sendStatus(200);
 }

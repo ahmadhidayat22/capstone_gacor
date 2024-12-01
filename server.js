@@ -17,11 +17,11 @@ import { softLimiter } from './middleware/limiter.js';
 import  AuditLog  from './utils/auditLog.js';
 
 let swaggerDocument = yaml.load('./swagger.yaml');
-const url = process.env.BASE_URL || 'localhost:5000/api/v1'; // Set url 
-swaggerDocument.servers = [{ url: url, description: 'Stagging api URL' }]
+const url = process.env.BASE_URL || 'http://localhost:5000'; // Set url 
+swaggerDocument.servers = [{ url: `${url}/api/v1/`, description: 'Stagging api URL' }]
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.set('view engine', 'ejs');
 
 try {
@@ -40,7 +40,7 @@ try {
 
 app.use(softLimiter);
 app.use((req, res, next) => {
-    res.setTimeout(10000, () => { // timeout 5 detik
+    res.setTimeout(20000, () => { // timeout 20 detik
       res.status(503).json({ message: "Permintaan timeout. Silakan coba lagi." });
     });
     next();
