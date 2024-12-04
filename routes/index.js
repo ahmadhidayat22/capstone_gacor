@@ -22,7 +22,7 @@ const router = express.Router();
 
 router.get('/news', verifyToken, fetchNews);
 router.get('/users',verifyToken, getUser);
-router.get('/profile/:id', profile)
+router.get('/profile', verifyToken, profile)
 router.post('/register', Register);
 router.post('/login', Login);
 router.post('/token', refreshToken);

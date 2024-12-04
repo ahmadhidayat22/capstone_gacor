@@ -24,11 +24,11 @@ const scopes = [
 ]
 
 const profile = async(req,res) => {
-    const { id } = req.params
+    const email  = req.email;
     try {
         const user= await Users.findOne({
             where:{
-                id: id
+                email : email
             },
             attributes: ['username', 'email', 'createdAt']
 
