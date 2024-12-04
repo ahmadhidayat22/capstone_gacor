@@ -1,5 +1,6 @@
 import Users from './models/UserModel.js';
 import News from './models/NewsModel.js';
+import Product from './models/ProductModel.js';
 import PasswordReset from './models/PasswordReset.js'
 
 
@@ -27,7 +28,9 @@ app.set('view engine', 'ejs');
 try {
     await db.authenticate();
     // await Users.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
+    // await Product.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
     // await News.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
+
     // await PasswordReset.sync();
     
     console.log('database Connected')

@@ -29,4 +29,11 @@ const Users = db.define('users', {
     freezeTableName: true
 })
 
+Users.associate = (models) => {
+    Users.hasMany(models.Product, {
+      foreignKey: "userId",
+      as: "products", // Nama alias untuk relasi
+    });
+};
+
 export default Users;

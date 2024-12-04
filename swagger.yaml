@@ -172,6 +172,83 @@ paths:
         '401':
           description: Tidak diotorisasi
 
+  
+  /product:
+    get:
+      summary: Mendapatkan daftar produk
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Daftar produk berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Tidak diotorisasi
+    
+    post:
+      summary: Menambahkan produk baru
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Produk berhasil ditambahkan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Data produk tidak valid
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Tidak diotorisasi
+          
+  
+  /product/{id}:
+    get:
+      summary: Mendapatkan detail produk berdasarkan ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID produk
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Detail produk berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Produk tidak ditemukan
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Tidak diotorisasi
+
 
   /news:
     get:
@@ -279,3 +356,25 @@ components:
         category:
           type: string
           example: "health"
+    
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Minuman Sehat"
+        image:
+          type: string
+          example: "https://example.com/image.jpg"
+        gradien:  # Jika ini adalah "grade", ganti menjadi nutriGrade atau grade
+          type: string
+          example: "B"
+        category:
+          type: string
+          enum: ["makanan", "minuman"]
+          example: "minuman"
+      required:
+        - name
+        - gradien
+        - category
+        - userId
