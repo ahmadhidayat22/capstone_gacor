@@ -23,7 +23,6 @@ swaggerDocument.servers = [{ url: `${url}/api/v1/`, description: 'Stagging api U
 
 const app = express();
 const port = process.env.PORT || 8080;
-app.set('view engine', 'ejs');
 
 try {
     await db.authenticate();
@@ -37,10 +36,10 @@ try {
 } catch (error) {
     console.error(error);
     
-
 }
 
-
+app.set('view engine', 'ejs');
+app.use('trust proxy', true)
 app.use(softLimiter);
 app.use((req, res, next) => {
     res.setTimeout(20000, () => { // timeout 20 detik
