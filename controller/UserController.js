@@ -24,20 +24,28 @@ const scopes = [
 ]
 
 const profile = async(req,res) => {
-    const { id } = req.params
+    const email  = req.email
+    console.log(req.email);
+    
     try {
         const user= await Users.findOne({
             where:{
-                id: id
+                email: email
             },
             attributes: ['username', 'email', 'createdAt']
 
         })
 
-        res.status(200).json({data: user})
+        res.status(200).json({
+            error: false,
+            data: user
+        })
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: "server error"})
+        res.status(500).json({
+            error: true,
+            message: "server error"
+        })
     }
 }
 
@@ -60,7 +68,11 @@ const Register = async(req, res) => {
     const { username , email, password, confPassword }= req.body;
     
     
-    if(password !== confPassword) return res.status(400).json({message: "password dan confirm password tidak cocok"})
+    if(password !== confPassword) return res.status(400).json({
+        error: true,
+        message: "password dan confirm password tidak cocok"
+    })
+    
     const id = nanoid(16);
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
@@ -75,7 +87,9 @@ const Register = async(req, res) => {
             
         });
 
-        if(hasUser) return res.status(400).json({message: "username atau email sudah terdaftar"});
+        if(hasUser) return res.status(400).json({
+            error: true,
+            message: "username atau email sudah terdaftar"});
 
 
         await Users.create({
@@ -84,7 +98,7 @@ const Register = async(req, res) => {
             email: email,
             password: hashPassword
         })
-        res.status(201).json({message: "Register berhasil"});
+        res.status(201).json({error: false,message: "Register berhasil"});
         return
     } catch (error) {
         console.error(error);
@@ -103,7 +117,7 @@ const Login = async(req, res) => { // login with email and password only , modif
             }
         })
         const match = await bcrypt.compare(req.body.password, user[0].password);
-        if(!match) return res.status(400).json({message: "password salah"})
+        if(!match) return res.status(400).json({error: true,message: "username atau password salah"})
         const userId = user[0].id;
         const username = user[0].username;
         const email = user[0].email;
@@ -130,6 +144,7 @@ const Login = async(req, res) => { // login with email and password only , modif
         // })
 
         return res.status(200).json({
+            error: false,
             message: "Login berhasil",
             accessToken: accessToken,
             refreshToken: {
@@ -138,7 +153,9 @@ const Login = async(req, res) => { // login with email and password only , modif
             },
         });
     } catch (error) {
-        res.status(404).json({message: "email tidak ditemukan"})
+        console.error(error);
+        
+        res.status(404).json({error: true,message: "email tidak ditemukan"})
     }
 }
 
@@ -217,8 +234,8 @@ const callbackOauthLogin = async (req, res) => {
         
 
     } catch (error) {
-        console.error("Error during token exchange:", error.response?.data || error.message);
-        res.status(500).json({ error: "Failed to exchange token", details: error.response?.data || error.message });
+        console.error("Kesalahan ketika pertukaran token:", error.response?.data || error.message);
+        res.status(500).json({ error: "Kesalahan ketika pertukaran token:", details: error.response?.data || error.message });
     }
 };
 
@@ -368,7 +385,10 @@ const resetPassword = async(req,res) => {
                 userId: id
             }
         })
-        res.status(200).json({message : 'password berhasil diubah'});
+        res.status(200).json({ 
+            error: false,
+            message : 'password berhasil diubah' 
+        });
         // res.render('reset-password', { id, token, error: 'password tidak boleh sama dengan password sebelumnya' });
         
     } catch (error) {
@@ -381,13 +401,14 @@ const resetPassword = async(req,res) => {
 const logout = async(req,res) => {
     const { refreshToken }= req.body;
 
-    if(!refreshToken) return res.sendStatus(204);
+    try {
+        if(!refreshToken) return res.status(400).json({error: true, message: "RefreshToken tidak valid"});
     const user = await Users.findAll({
         where:{
             refresh_token: refreshToken
         }
     })
-    if(!user[0]) return res.sendStatus(204);
+    if(!user[0]) return res.status(400).json({error:true, message: "RefreshToken tidak valid"});
     const userId = user[0].id;
     await Users.update({refresh_token: null}, {
         where:{
@@ -396,7 +417,14 @@ const logout = async(req,res) => {
     })
     // res.clearCookie('refreshToken');
     
-    return res.sendStatus(200);
+    return res.status(200).json({error:false, message: "Berhasil Logout"});
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error:true,  message: 'Gagal Logout' }); 
+        
+    }
+    
 }
 
 
