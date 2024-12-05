@@ -1,7 +1,7 @@
 GET http://localhost:5000/
 ###
-GET http://localhost:5000/api/v1/profile/aFNZ6-3VvodbWiWd
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhRk5aNi0zVnZvZGJXaVdkIiwidXNlcm5hbWUiOiJhaG1hZCIsImVtYWlsIjoiYWhtYWRudXJoaWRheWF0MjcxQGdtYWlsLmNvbSIsImlhdCI6MTczMjk2OTcyOSwiZXhwIjoxNzMyOTczMzI5fQ.xJu3TlsjpTq_v14b_d-Z94dMWA0Orp1jiGKF7ThQsA4
+GET http://localhost:5000/api/v1/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJvR3h0S2tySG9BNU9uQUJkIiwidXNlcm5hbWUiOiJhaG1hZCIsImVtYWlsIjoiYWhtYWRudXJoaWRheWF0MjcxQGdtYWlsLmNvbSIsImlhdCI6MTczMzMwNzMxOCwiZXhwIjoxNzMzMzEwOTE4fQ.1fs5bLkiw15YpEUNdg3ojK7Y12DLrikQDW8F_M_XxrE
 
 ###
 GET http://localhost:5000/api/v1/users

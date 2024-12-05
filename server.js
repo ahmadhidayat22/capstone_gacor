@@ -1,5 +1,6 @@
 import Users from './models/UserModel.js';
 import News from './models/NewsModel.js';
+import Product from './models/ProductModel.js';
 import PasswordReset from './models/PasswordReset.js'
 
 
@@ -27,7 +28,9 @@ app.set('view engine', 'ejs');
 try {
     await db.authenticate();
     // await Users.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
+    // await Product.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
     // await News.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan
+
     // await PasswordReset.sync();
     
     console.log('database Connected')
@@ -50,22 +53,9 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
-app.use(AuditLog);
+// app.use(AuditLog);
 
-// app.use((req,res, next) => {
-//   const now = new Date();
-//   const formattedDate = now.toLocaleString('en-US', { 
-//     year: 'numeric', 
-//     month: '2-digit', 
-//     day: '2-digit', 
-//     hour: '2-digit', 
-//     minute: '2-digit', 
-//     second: '2-digit', 
-//     hour12: false 
-//   });
-//   console.log(`${req.method} ${req.path} FROM ${req.headers['x-real-ip'] ||req.headers['x-forwarded-for']?.split(',')[0] || req.ip}  TIME: ${formattedDate} - SOURCE: ${req.get('user-agent')}`);
-//   next();
-// })
+
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req,res) => {

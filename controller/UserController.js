@@ -24,8 +24,8 @@ const scopes = [
 ]
 
 const profile = async(req,res) => {
+   
     const email  = req.email
-    console.log(req.email);
     
     try {
         const user= await Users.findOne({
