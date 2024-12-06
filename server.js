@@ -39,7 +39,7 @@ try {
 }
 
 app.set('view engine', 'ejs');
-// app.use('trust proxy', true)
+app.use('trust proxy', true)
 app.use(softLimiter);
 app.use((req, res, next) => {
     res.setTimeout(20000, () => { // timeout 20 detik
