@@ -10,6 +10,8 @@ import {google} from 'googleapis';
 import dotenv from 'dotenv';
 dotenv.config();
 import HTML_TEMPLATE from '../utils/htmlTemplate.js';
+
+
 const appUrl = process.env.BASE_URL || 'http://localhost:5000';
 
 const oauth2Client = new google.auth.OAuth2(
@@ -161,6 +163,7 @@ const Login = async(req, res) => { // login with email and password only , modif
 
 const redirectOauthLogin = async(req,res) => {
     // return res.redirect(authUrl);
+    
     const authUrl= oauth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: scopes.join(' '),
@@ -172,8 +175,7 @@ const redirectOauthLogin = async(req,res) => {
 }
 const callbackOauthLogin = async (req, res) => {
     const { code } = req.query;
-    // console.log("Authorization Code:", code); // Log kode otorisasi
-
+   
     try {
         const { tokens } = await oauth2Client.getToken(code); // Mendapatkan token dari Google
         // console.log("Tokens Received:", tokens); // Log token yang diterima
@@ -183,10 +185,10 @@ const callbackOauthLogin = async (req, res) => {
         const oauth2 = google.oauth2({
             auth: oauth2Client,
             version: 'v2'
+
         });
         const { data } = await oauth2.userinfo.get();
-        // console.log("User Info:", data); // Log informasi pengguna
-
+      
         if (!data.email || !data.name) {
             return res.status(400).json({ message: "Username atau email tidak ditemukan", data });
         }
@@ -223,6 +225,7 @@ const callbackOauthLogin = async (req, res) => {
         // });
         
         return res.status(200).json({
+            error: false,
             message: "Login berhasil",
             accessToken: accessToken,
             refreshToken: {
@@ -248,7 +251,9 @@ const forgotPassword = async(req,res) => {
             email: email
         }
     })
-    if(!user) return res.status(400).json({message: "email tidak ditemukan" })
+    if(!user) return res.status(400).json({
+        message: "email tidak ditemukan" 
+    })
     
     await PasswordReset.destroy({
         where: {
