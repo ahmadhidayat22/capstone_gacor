@@ -7,18 +7,21 @@ import sendEmail from './EmailController.js';
 import { Op } from 'sequelize';
 import { nanoid } from "nanoid";
 import {google} from 'googleapis';
+import { OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv';
 dotenv.config();
 import HTML_TEMPLATE from '../utils/htmlTemplate.js';
-
-
+import { authConfig } from '../config/AuthConfig.js';
+import { TokenUtils } from '../utils/tokenUtils.js';
 const appUrl = process.env.BASE_URL || 'http://localhost:5000';
 
-const oauth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    `${appUrl}/api/v1/auth/google/callback`,
-);
+const client = new OAuth2Client(authConfig.GOOGLE_CLIENT_ID);
+
+// const oauth2Client = new google.auth.OAuth2(
+//     process.env.GOOGLE_CLIENT_ID,
+//     process.env.GOOGLE_CLIENT_SECRET,
+//     `${appUrl}/api/v1/auth/google/callback`,
+// );
 const scopes = [
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
@@ -112,24 +115,24 @@ const Login = async(req, res) => { // login with email and password only , modif
 
     try {
         
-        const user = await Users.findAll({
+        const user = await Users.findOne({
             where:{
-                email: req.body.email
-                
+                [Op.or]: [
+                    {email: req.body.email},
+                    {username: req.body.email}
+                ]
             }
         })
-        const match = await bcrypt.compare(req.body.password, user[0].password);
+        const match = await bcrypt.compare(req.body.password, user.password);
         if(!match) return res.status(400).json({error: true,message: "username atau password salah"})
-        const userId = user[0].id;
-        const username = user[0].username;
-        const email = user[0].email;
-        const accessToken = jwt.sign({userId,username,email}, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: '1h'
-        })
+        const userId = user.id;
+        // const username = user[0].username;
+        // const email = user[0].email;
+        // console.log(user);
+        
+        const accessToken = TokenUtils.generateAccessToken(user)
 
-        const refreshToken = jwt.sign({userId,username,email}, process.env.REFRESH_TOKEN_SECRET, {
-            expiresIn: '1d'
-        })
+        const refreshToken = TokenUtils.generateRefreshToken(user)
         // console.log(userId,username,email);
 
         await Users.update({refresh_token: refreshToken}, {
@@ -151,12 +154,11 @@ const Login = async(req, res) => { // login with email and password only , modif
             accessToken: accessToken,
             refreshToken: {
                 token: refreshToken,
-                expiresIn: '1d' // 1 hari
+                expiresIn: TokenUtils.expiresRefreshToken // 1 hari
             },
         });
     } catch (error) {
         console.error(error);
-        
         res.status(404).json({error: true,message: "email tidak ditemukan"})
     }
 }
@@ -242,7 +244,62 @@ const callbackOauthLogin = async (req, res) => {
     }
 };
 
+const verifyGoogleLogin = async(req,res) => {
+    if(!client) {
+        console.log("Google OAuth2 client tidak terinisialisasi.");
+        return res.status(500).json({ error: "Google OAuth2 client tidak terinisialisasi." });
+    }
 
+    // const { token } = req.body;
+    const  token  = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjOGEyMGFmN2ZjOThmOTdmNDRiMTQyYjRkNWQwODg0ZWIwOTM3YzQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTQzMjc5NzE0ODI0MTk4NTkyMDMiLCJlbWFpbCI6ImFtd2F5ODUzMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IjNuVGZuRC05SXhiOWk4ckNDYzNvNlEiLCJuYW1lIjoiQW13YXkiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSXU4TGthTDRyaFlCZHFoMW1EWW9kX1JuUGp4MW8xcjdyWjMzblR2VXVKbklnTXVnPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkFtd2F5IiwiaWF0IjoxNzMzNTY1MDUzLCJleHAiOjE3MzM1Njg2NTN9.rhQoG0Dj1lf4DiJQjqlstKFwU6jZRUyI6aQcNtYmdAB9B4_yecJF5OSsMT6gGH-BBql6Y6lQMGQ_7abigMCVOnl1xB_99b0FF43q4nRyvMSjCGoFn-93AqhCzGZhNzUo-UQVS2RRbjbUfZfmD8f9gMN2xwMO0tXGYmX-F3JlKMbfOQD9hvU9_qXHGlWi3AsfdpcWrwJDCjus9wfJDJHSnxBjSX50ugibMEZPGlwRxzhAyhs8dBakXYlYn521yfQweM1-uYxcPIL3TwhcXTszItFAfNjOuFeyum4SMkCE1VOYxxEiGFz9jdcAMLYJ9pfua1jFw4UgcF5wucqdnPh9Sw';
+    console.log(token);
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: authConfig.GOOGLE_CLIENT_ID  // Pastikan sesuai
+        });
+
+        const payload = ticket.getPayload();
+
+        if(!payload.name || !payload.email) {
+            return res.status(400).json({ error: "Username atau email tidak ditemukan" });
+        }
+        let user = await Users.findOne({
+            where: { email: payload.email }
+        });
+        const id = nanoid(16);
+        if(!user){
+            user = await Users.create({
+                id: id,
+                username: payload.name,
+                email: payload.email,
+            });
+        }
+
+        const accessToken = TokenUtils.generateAccessToken(payload);
+        const refreshToken = TokenUtils.generateRefreshToken(payload);
+
+        // console.log(accessToken, refreshToken);
+        await user.update({ refresh_token: refreshToken })
+
+
+        return res.status(200).json({
+            error: false,
+            message: "Login berhasil",
+            accessToken: accessToken,
+            refreshToken: {
+                token: refreshToken,
+                expiresIn: TokenUtils.expiresRefreshToken // 1 hari
+            },
+        });
+
+        
+
+    } catch (error) {
+        console.error("Kesalahan saat verifikasi token:", error);
+        return res.status(500).json({ error: "Kesalahan saat verifikasi token." });
+    }
+}
 
 const forgotPassword = async(req,res) => {
     const { email } = req.body;
@@ -444,6 +501,7 @@ profile,
  forgotPassword,
  getResetPassword,
  resetPassword,
+ verifyGoogleLogin
 
 }
 
