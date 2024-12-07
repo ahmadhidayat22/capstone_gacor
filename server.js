@@ -14,6 +14,12 @@ import yaml from 'yamljs';
 import cors from 'cors';
 import { softLimiter } from './middleware/limiter.js';
 import  AuditLog  from './utils/auditLog.js';
+import path from 'path'
+import { fileURLToPath } from 'url';
+
+// Definisikan __dirname secara manual
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let swaggerDocument = yaml.load('./swagger.yaml');
 const url = process.env.BASE_URL || 'http://localhost:5000'; // Set url 
@@ -43,6 +49,7 @@ try {
 
 
 app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 // app.set('trust proxy', true)
 app.use(softLimiter);
 app.use((req, res, next) => {
@@ -64,7 +71,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req,res) => {
   res.send(" <a href= '/api/docs'>documentation </a>");
 })
-
+app.get('/not-found', (req,res) => {
+    res.render('404');
+})
 app.use("/api/v1/",router)
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- <base href="/"> -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Not-found</title>
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
+    /> -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+  </head>
+  <body>
+    <div class="oopss">
+      <div class="error-text">
+        <img
+          src="https://cdn.rawgit.com/ahmedhosna95/upload/1731955f/sad404.svg"
+          alt="404"
+        />
+        <span>404 PAGE</span>
+        <p class="p-a">The page you were looking for could not be found.</p>
+        <p class="p-b">Back to previous page ...</p>
+        <a href="#" class="back">Back to previous page ...</a>
+      </div>
+    </div>
+    <button onclick="showAlert()">Show Alert</button>
+  <script>
+    // JavaScript untuk menampilkan SweetAlert2
+    const toastFalse = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 5000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    })
+    const error = "<%= error %>";
+    if(error){
+        Swal.fire({
+        title: "Error",
+        text: error,
+        icon: "error"
+        });
+      
+    }
+    // toastFalse.fire({
+    //     icon: "error",
+    //     title: error
+    //   })
+    // console.log(error);
+    
+
+  </script>
+  </body>
+</html>

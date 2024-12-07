@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { mailConfig } from '../config/AuthConfig';
+import { mailConfig } from '../config/AuthConfig.js';
 const transporter = nodemailer.createTransport({
     
     service: mailConfig.MAIL_SERVICE ,

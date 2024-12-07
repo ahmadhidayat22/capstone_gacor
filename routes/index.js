@@ -3,8 +3,8 @@ import {
     getUser, 
     Register,
     Login,
-    redirectOauthLogin,
-    callbackOauthLogin,
+    // redirectOauthLogin,
+    // callbackOauthLogin,
     forgotPassword,
     resetPassword,
     logout,
@@ -52,5 +52,4 @@ router.post('/reset-password/:id/:token', hardLimiter, resetPassword);
 router.delete('/logout', logout);
 
 router.get('/verify-google-login', verifyGoogleLogin);
-
 export default router;

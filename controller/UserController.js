@@ -244,60 +244,60 @@ const Login = async(req, res) => { // login with email and password only , modif
 //     }
 // };
 
-// const verifyGoogleLogin = async(req,res) => {
-//     if(!client) {
-//         console.log("Google OAuth2 client tidak terinisialisasi.");
-//         return res.status(500).json({ error: "Google OAuth2 client tidak terinisialisasi." });
-//     }
-//     const { token } = req.body;
-//     console.log(token);
-//     try {
-//         const ticket = await client.verifyIdToken({
-//             idToken: token,
-//             audience: authConfig.GOOGLE_CLIENT_ID  // Pastikan sesuai
-//         });
+const verifyGoogleLogin = async(req,res) => {
+    if(!client) {
+        console.log("Google OAuth2 client tidak terinisialisasi.");
+        return res.status(500).json({ error: "Google OAuth2 client tidak terinisialisasi." });
+    }
+    const { token } = req.body;
+    console.log(token);
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: authConfig.GOOGLE_CLIENT_ID  // Pastikan sesuai
+        });
 
-//         const payload = ticket.getPayload();
+        const payload = ticket.getPayload();
 
-//         if(!payload.name || !payload.email) {
-//             return res.status(400).json({ error: "Username atau email tidak ditemukan" });
-//         }
-//         let user = await Users.findOne({
-//             where: { email: payload.email }
-//         });
-//         const id = nanoid(16);
-//         if(!user){
-//             user = await Users.create({
-//                 id: id,
-//                 username: payload.name,
-//                 email: payload.email,
-//             });
-//         }
+        if(!payload.name || !payload.email) {
+            return res.status(400).json({ error: "Username atau email tidak ditemukan" });
+        }
+        let user = await Users.findOne({
+            where: { email: payload.email }
+        });
+        const id = nanoid(16);
+        if(!user){
+            user = await Users.create({
+                id: id,
+                username: payload.name,
+                email: payload.email,
+            });
+        }
 
-//         const accessToken = TokenUtils.generateAccessToken(payload);
-//         const refreshToken = TokenUtils.generateRefreshToken(payload);
+        const accessToken = TokenUtils.generateAccessToken(payload);
+        const refreshToken = TokenUtils.generateRefreshToken(payload);
 
-//         // console.log(accessToken, refreshToken);
-//         await user.update({ refresh_token: refreshToken })
+        // console.log(accessToken, refreshToken);
+        await user.update({ refresh_token: refreshToken })
 
 
-//         return res.status(200).json({
-//             error: false,
-//             message: "Login berhasil",
-//             accessToken: accessToken,
-//             refreshToken: {
-//                 token: refreshToken,
-//                 expiresIn: TokenUtils.expiresRefreshToken // 1 hari
-//             },
-//         });
+        return res.status(200).json({
+            error: false,
+            message: "Login berhasil",
+            accessToken: accessToken,
+            refreshToken: {
+                token: refreshToken,
+                expiresIn: TokenUtils.expiresRefreshToken // 1 hari
+            },
+        });
 
         
 
-//     } catch (error) {
-//         console.error("Kesalahan saat verifikasi token:", error);
-//         return res.status(500).json({ error: "Kesalahan saat verifikasi token." });
-//     }
-// }
+    } catch (error) {
+        console.error("Kesalahan saat verifikasi token:", error);
+        return res.status(500).json({ error: "Kesalahan saat verifikasi token." });
+    }
+}
 
 const forgotPassword = async(req,res) => {
     const { email } = req.body;
@@ -342,12 +342,14 @@ const getResetPassword = async(req,res) => {
     const { token, id } = req.params;
     const resetToken = await PasswordReset.findOne({
         where: {
-            id: id
+            userId: id
         }
     })
+    // console.log(id);
+    
     if(!resetToken || resetToken.length === 0 ) {
         // return res.status(400).json({message: "token tidak ditemukan atau sudah kadaluarsa"});
-        return res.render('reset-password', { id, token, error: 'token tidak ditemukan atau sudah kadaluarsa' });
+        return res.render('404', { id, token, error: 'Token tidak ditemukan atau sudah kadaluarsa' });
     
     }
     if(Date.now() > resetToken.expiresAt) {
@@ -357,14 +359,13 @@ const getResetPassword = async(req,res) => {
             }
         });
         // return res.status(400).json({message: "token reset password sudah kadaluarsa"});
-        res.render('reset-password', { id, token, error: 'token reset password sudah kadaluarsa' });
-
+        res.render('404', { id, token, error: 'Token reset password sudah kadaluarsa' });
     }
     
-    console.log(resetToken)
+    // console.log(resetToken)
     if(!bcrypt.compareSync(token, resetToken.hashedToken)) {
         // return res.status(400).json({message: "token tidak valid"});  
-        return res.render('reset-password', { id, token, error: 'token tidak valid' });
+        return res.render('404', { id, token, error: 'Token tidak valid' });
 
     }
 
@@ -493,8 +494,8 @@ profile,
  getUser,
  Register,
  Login,
- redirectOauthLogin,
- callbackOauthLogin,
+//  redirectOauthLogin,
+//  callbackOauthLogin,
  logout,
  forgotPassword,
  getResetPassword,
