@@ -69,7 +69,10 @@ const getUser = async(req, res) => {
 }
 
 const Register = async(req, res) => {
-    
+    // TODO : buat handler verify untuk email agar @gmail.com
+     
+
+
     const { username , email, password, confPassword }= req.body;
     
     
@@ -399,7 +402,7 @@ const resetPassword = async(req,res) => {
         }
         if(!user){
             // return res.status(400).json({message: "user tidak ditemukan"});
-            return res.render('reset-password', { id, token, error: 'user tidak ditemukan' });
+            return res.render('404', { id, token, error: 'user tidak ditemukan' });
         }
         
         const resetToken = await PasswordReset.findOne({
@@ -411,7 +414,7 @@ const resetPassword = async(req,res) => {
 
         if(!resetToken || resetToken.length === 0 ) {
             // return res.status(400).json({message: "token tidak ditemukan atau sudah kadaluarsa"});
-            return res.render('reset-password', { id, token, error: 'token tidak ditemukan atau sudah kadaluarsa' });
+            return res.render('404', { id, token, error: 'token tidak ditemukan atau sudah kadaluarsa' });
         
         }
         
@@ -423,14 +426,14 @@ const resetPassword = async(req,res) => {
                 }
             });
             // return res.status(400).json({message: "token reset password sudah kadaluarsa"});
-            res.render('reset-password', { id, token, error: 'token reset password sudah kadaluarsa' });
+            await res.render('404', { id, token, error: 'token reset password sudah kadaluarsa' });
 
         }
         
         
         if(!bcrypt.compareSync(token, resetToken.hashedToken)) {
             // return res.status(400).json({message: "token tidak valid"});  
-            return res.render('reset-password', { id, token, error: 'token tidak valid' });
+            return res.render('404', { id, token, error: 'token tidak valid' });
 
         }
         const salt = await bcrypt.genSalt();

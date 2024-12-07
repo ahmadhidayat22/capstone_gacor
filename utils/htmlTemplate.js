@@ -27,6 +27,7 @@ const HTML_TEMPLATE = (reset_link) => {
         .email-header {
             text-align: center;
             margin-bottom: 20px;
+            
         }
         .email-header img {
             max-width: 150px;
@@ -63,7 +64,7 @@ const HTML_TEMPLATE = (reset_link) => {
 <body>
     <div class="email-container">
         <div class="email-header">
-            <img src="https://yourapp.com/logo.png" alt="Your App Logo">
+            <img src="https://raw.githubusercontent.com/ahmadhidayat22/capstone_gacor/dca5122768c65102ce4af60dc0f96a163bc9874b/public/logoApp.png" alt="Your App Logo" style="width: 50px">
         </div>
         <div class="email-body">
             <h2>Hello, </h2>
