@@ -41,8 +41,9 @@ router.get('/profile',verifyToken, profile)
 router.post('/register', Register);
 router.post('/login', Login);
 router.post('/token', refreshToken);
-router.get('/auth/google', redirectOauthLogin);
-router.get('/auth/google/callback', callbackOauthLogin);
+
+// router.get('/auth/google', redirectOauthLogin);
+// router.get('/auth/google/callback', callbackOauthLogin);
 
 router.post('/forgot-password', hardLimiter, forgotPassword);
 router.get('/reset-password/:id/:token', getResetPassword);

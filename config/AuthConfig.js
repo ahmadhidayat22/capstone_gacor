@@ -12,3 +12,13 @@ export const authConfig ={
     }
   
 }
+
+export const mailConfig={
+  MAIL_USER: process.env.MAIL_ID,
+  MAIL_PASS: process.env.MAIL_PASS,
+  MAIL_SERVICE: "gmail",
+  HOST: "smtp.gmail.com",
+  PORT: 587,
+  SECURE :false,
+
+}

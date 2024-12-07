@@ -1,13 +1,14 @@
 import nodemailer from 'nodemailer';
+import { mailConfig } from '../config/AuthConfig';
 const transporter = nodemailer.createTransport({
     
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 587,
-    secure:false,
+    service: mailConfig.MAIL_SERVICE ,
+    host: mailConfig.HOST,
+    port: mailConfig.PORT,
+    secure: mailConfig.SECURE,
     auth: {
-        user: process.env.MAIL_ID,
-        pass: process.env.MAIL_PASS
+        user: mailConfig.MAIL_USER,
+        pass: mailConfig.MAIL_PASS
     }
 });
 const sendEmail = async(userMail, title, content) => {
