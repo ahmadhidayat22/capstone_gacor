@@ -2,8 +2,6 @@ import Users from './models/UserModel.js';
 import News from './models/NewsModel.js';
 import Product from './models/ProductModel.js';
 import PasswordReset from './models/PasswordReset.js'
-
-
 import express from 'express';
 import db  from './config/Database.js';
 import router from './routes/index.js'
@@ -45,7 +43,7 @@ try {
 
 
 app.set('view engine', 'ejs');
-app.set('trust proxy', true)
+// app.set('trust proxy', true)
 app.use(softLimiter);
 app.use((req, res, next) => {
     res.setTimeout(20000, () => { // timeout 20 detik

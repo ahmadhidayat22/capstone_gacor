@@ -1,0 +1,393 @@
+{
+	"info": {
+		"_postman_id": "9a8adc1b-37ac-4a82-aa89-5307b020d543",
+		"name": "Nutrisee_backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31965168"
+	},
+	"item": [
+		{
+			"name": "test base url",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}",
+					"host": [
+						"{{baseUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"q\",\r\n    \"email\": \"q@gmail.com\",\r\n    \"password\":\"123\",\r\n    \"confPassword\":\"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login successful and token set to environment\", function () {\r",
+							"    // Parse the response body\r",
+							"    const response = pm.response.json();\r",
+							"\r",
+							"    // Check if the response contains an accessToken\r",
+							"    pm.expect(response).to.have.property(\"accessToken\");\r",
+							"\r",
+							"    // Set the accessToken to an environment variable\r",
+							"    pm.environment.set(\"accessToken\", response.accessToken);\r",
+							"    pm.environment.set(\"refreshToken\", response.refreshToken.token);\r",
+							"    \r",
+							"    // Optional: Log a message for debugging\r",
+							"    console.log(\"Access token set to environment:\", response.accessToken);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"email\": \"q@gmail.com\",\r\n    \"password\": \"123\"\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/profile",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login google",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login successful and token set to environment\", function () {\r",
+							"    // Parse the response body\r",
+							"    const response = pm.response.json();\r",
+							"\r",
+							"    // Check if the response contains an accessToken\r",
+							"    pm.expect(response).to.have.property(\"accessToken\");\r",
+							"\r",
+							"    // Set the accessToken to an environment variable\r",
+							"    pm.environment.set(\"accessToken\", response.accessToken);\r",
+							"    pm.environment.set(\"refreshToken\", response.refreshToken.token);\r",
+							"    \r",
+							"    // Optional: Log a message for debugging\r",
+							"    console.log(\"Access token set to environment:\", response.accessToken);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/verify-google-login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"verify-google-login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get New access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// pm.test(\"token set to environment\", function () {\r",
+							"//     // Parse the response body\r",
+							"//     const response = pm.response.json();\r",
+							"\r",
+							"//     // Check if the response contains an accessToken\r",
+							"//     pm.expect(response).to.have.property(\"accessToken\");\r",
+							"\r",
+							"//     // Set the accessToken to an environment variable\r",
+							"//     pm.environment.set(\"accessToken\", response.accessToken);\r",
+							"\r",
+							"//     // Optional: Log a message for debugging\r",
+							"//     console.log(\"Access token set to environment:\", response.accessToken);\r",
+							"// });\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJQTEdaMEpoNmdHWE9IT1lwIiwidXNlcm5hbWUiOiJxIiwiZW1haWwiOiJxQGdtYWlsLmNvbSIsImlhdCI6MTczMzA2NzQ3OSwiZXhwIjoxNzMzMTUzODc5fQ.LTpru2CMRH5O_QpZEJ-90Vh3kwtMDnTa36R2T5PzJJQ\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJYVk9GZEtLTFFnOTdlNHFsIiwidXNlcm5hbWUiOiJxIiwiZW1haWwiOiJxQGdtYWlsLmNvbSIsImlhdCI6MTczMzQxMzc1OSwiZXhwIjoxNzMzNTAwMTU5fQ.AgG2tv4IAu2wSe_ZTLrO0W7uZuwrKXWzpkFDGyhU3IU\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get News",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/news",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"news"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

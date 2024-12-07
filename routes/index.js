@@ -10,6 +10,7 @@ import {
     logout,
     getResetPassword,
     profile,
+    verifyGoogleLogin
 
 } from '../controller/UserController.js';
 
@@ -23,6 +24,7 @@ import { verifyToken } from '../middleware/VerifyToken.js';
 import { refreshToken } from '../controller/RefreshToken.js';
 import { fetchNews } from '../controller/NewsController.js';
 import { hardLimiter } from '../middleware/limiter.js';
+
 const router = express.Router();
 
 //news
@@ -48,6 +50,6 @@ router.post('/reset-password/:id/:token', hardLimiter, resetPassword);
 
 router.delete('/logout', logout);
 
-
+router.get('/verify-google-login', verifyGoogleLogin);
 
 export default router;
