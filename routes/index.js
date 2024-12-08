@@ -16,7 +16,7 @@ import {
 
 import { 
     getAllProducts, 
-    getProductById, 
+    getProductByName, 
     createProduct
 } from '../controller/ProductController.js';
 
@@ -32,7 +32,7 @@ router.get('/news', verifyToken, fetchNews);
 
 //produk
 router.get('/product', verifyToken, getAllProducts);
-router.get('/product/:id', verifyToken, getProductById);
+router.get('/product/:name', verifyToken, getProductByName);
 router.post('/product', verifyToken, createProduct);
 
 

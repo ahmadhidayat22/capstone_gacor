@@ -12,7 +12,7 @@ export const verifyToken = (req, res, next) => {
     if(!decoded) return res.sendStatus(403);
     
     req.email = decoded.email;
-    req.userId = decoded.userId;
+    req.id = decoded.id; //manggil user id
     next();
 
     // jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err,decoded) => {

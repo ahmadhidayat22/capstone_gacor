@@ -343,18 +343,18 @@ paths:
           description: Tidak diotorisasi
           
   
-  /product/{id}:
+  /product/{name}:
     get:
-      summary: Mendapatkan detail produk berdasarkan ID
+      summary: Mendapatkan detail produk berdasarkan nama
       tags:
         - Products
       parameters:
         - in: path
-          name: id
+          name: name
           required: true
-          description: ID produk
+          description: Nama produk yang ingin dicari
           schema:
-            type: integer
+            type: string
       security:
         - bearerAuth: []
       responses:
@@ -365,7 +365,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Product'
         '404':
-          description: Produk tidak ditemukan
+          description: Produk tidak ditemukan atau tidak diotorisasi
         '401':
           description: Token tidak valid
         '403':
@@ -484,19 +484,31 @@ components:
       properties:
         name:
           type: string
-          example: "Minuman Sehat"
+          example: "Nutri Bar"
         image:
           type: string
-          example: "https://example.com/image.jpg"
-        gradien:  # Jika ini adalah "grade", ganti menjadi nutriGrade atau grade
+          example: "nutri-bar.jpg"
+        protein:
+          type: number
+          example: 10.5
+        sugar:
+          type: number
+          example: 5.2
+        sodium:
+          type: number
+          example: 2.0
+        saturatedFat:
+          type: number
+          example: 1.5
+        calories:
+          type: number
+          example: 150.0
+        fiber:
+          type: number
+          example: 3.0
+        estVegetableContain:
+          type: number
+          example: 20.0
+        grade:
           type: string
-          example: "B"
-        category:
-          type: string
-          enum: ["makanan", "minuman"]
-          example: "minuman"
-      required:
-        - name
-        - gradien
-        - category
-        - userId
+          example: "A"

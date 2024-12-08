@@ -3,9 +3,7 @@ import db from "../config/Database.js";
 
 const { DataTypes } = Sequelize;
 
-const Product = db.define(
-  "products",
-  {
+const Product = db.define("products", {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -14,12 +12,36 @@ const Product = db.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    gradien: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    protein: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
     },
-    category: {
-      type: DataTypes.ENUM("makanan", "minuman"),
+    sugar: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    sodium: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    saturatedFat: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    calories: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    fiber: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    estVegetableContain: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    grade: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     userId: {

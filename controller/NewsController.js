@@ -1,5 +1,6 @@
 import axios from 'axios';
 import News from '../models/NewsModel.js';
+import { Op } from 'sequelize';
 
 export const fetchNews = async (req, res) => {
     try {
@@ -11,10 +12,11 @@ export const fetchNews = async (req, res) => {
             }
         });
         const newsData = response.data.data;
-        const randomNewsData = newsData.sort(() => Math.random() - 0.5); 
+        const filteredNewsData = newsData.filter(news => news.image);
+        const randomNewsData = filteredNewsData.sort(() => Math.random() - 0.5); 
 
         //nyalakan jika belum ada data tersimapan didatabase
-        // for (const news of newsData) {
+        // for (const news of filteredNewsData) {
         //     await News.create({
         //         title: news.title,
         //         description: news.description,
@@ -33,7 +35,10 @@ export const fetchNews = async (req, res) => {
         console.error('Error fetching news from API:', error.message);
         try {
             const backupNews = await News.findAll({ 
-                where: { category: 'health' },
+                where: { 
+                    category: 'health', 
+                    image: { [Op.ne]: null } 
+                },
                 limit: 10
             });
 
