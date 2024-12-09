@@ -5,3 +5,4 @@ clientSecret.json
 test.txt
 *.rest
 .vscode
+*secret.json

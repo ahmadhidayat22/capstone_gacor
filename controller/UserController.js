@@ -70,10 +70,14 @@ const getUser = async(req, res) => {
 
 const Register = async(req, res) => {
     // TODO : buat handler verify untuk email agar @gmail.com
-     
-
-
     const { username , email, password, confPassword }= req.body;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if(!emailRegex.test(email)) {
+        return res.status(400).json({
+            error: true,
+            message: "email harus menggunakan @gmail.com"
+        })
+    }
     
     
     if(password !== confPassword) return res.status(400).json({

@@ -4,6 +4,11 @@ import db from "../config/Database.js";
 const { DataTypes } = Sequelize;
 
 const Product = db.define("products", {
+      id:{
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,

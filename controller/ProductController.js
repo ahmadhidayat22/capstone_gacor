@@ -1,13 +1,27 @@
 import Product from '../models/ProductModel.js';
 import { Op } from 'sequelize'; 
+import { upload, deleteFile } from './Upload.js';
+import { nanoid } from 'nanoid';
 
 const getAllProducts = async (req, res) => {
+    try {
+        // const id = req.id;
+        const products = await Product.findAll();
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getAllProductsbyUserId = async(req, res) => {
     try {
         const id = req.id;
         const products = await Product.findAll({
             where: {
                 userId: id
-            }
+            },
+            attributes: {exclude: ['id']}
         });
 
         res.status(200).json(products);
@@ -15,6 +29,7 @@ const getAllProducts = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 const getProductByName = async (req, res) => {
     try {
@@ -41,18 +56,39 @@ const getProductByName = async (req, res) => {
 
 const createProduct = async (req, res) => {
     const { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain, grade } = req.body;
-    if (  !name || !grade ||
-        isNaN(protein) || isNaN(sugar) || isNaN(sodium) || 
-        isNaN(saturatedFat) || isNaN(calories) || isNaN(fiber) || 
-        isNaN(estVegetableContain)) {
+
+    // console.log(req.file);
+    // if (  !name || !grade ||
+    //     isNaN(protein) || isNaN(sugar) || isNaN(sodium) || 
+    //     isNaN(saturatedFat) || isNaN(calories) || isNaN(fiber) || 
+    //     isNaN(estVegetableContain)) {
+    //     return res.status(400).json({ message: 'Invalid input: ensure all fields are correctly filled' });
+    // }
+    if (  !name || !grade || !protein || !sugar || !sodium || !saturatedFat || !calories || !fiber || !estVegetableContain) {
         return res.status(400).json({ message: 'Invalid input: ensure all fields are correctly filled' });
     }
 
     const userId = req.id;  // Mendapatkan userId dari token
+    // console.log(userId);
+    
     try {
+        const uploadImage = await upload(req.file).then((uploadImage) => {
+            return uploadImage;
+        }).catch((error) => {
+            console.error('Error uploading image: ', error);
+            return error;
+        });
+        if(uploadImage?.success === false || uploadImage?.url === null) {
+            console.error('Failed to upload image: ', uploadImage.message);
+            return res.status(400).json({ message: 'Failed to upload image' });
+        }
+        
+        const imageUrl = uploadImage?.url;
+        const id = nanoid(16);
         const newProduct = await Product.create({
+            id: id,
             name: name,
-            image: image,
+            image: imageUrl,
             protein: protein,
             sugar: sugar,
             sodium: sodium,
@@ -68,10 +104,51 @@ const createProduct = async (req, res) => {
             message: 'Product created successfully',
             product: newProduct
         });
+
+        // res.status(201).json({
+        //     message: 'ok',
+        // });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.message });
     }
 };
 
-export{ getAllProducts, getProductByName, createProduct }
+const _deleteProduct = async(req,res) => {
+    const { id } = req.body;
+    try {
+
+        const filenameProduct = await Product.findOne({
+            where:{
+                id: id
+            },
+            attributes:['image']
+        })
+        if(!filenameProduct) return res.status(404).json({message: 'Product not found'});
+        // console.log(filenameProduct);
+        await deleteFile(filenameProduct.image);
+        await Product.destroy({
+            where: {
+                id: id
+            }
+        });
+
+        res.status(200).json({message: 'Product deleted successfully'});
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: error.message});
+    }
+}
+
+
+export{ 
+
+    getAllProducts,
+    getProductByName,
+    createProduct,
+    getAllProductsbyUserId,
+    _deleteProduct
+
+}
