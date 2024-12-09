@@ -20,8 +20,7 @@ const getAllProductsbyUserId = async(req, res) => {
         const products = await Product.findAll({
             where: {
                 userId: id
-            },
-            attributes: {exclude: ['id']}
+            }
         });
 
         res.status(200).json(products);

@@ -2,7 +2,7 @@ import rateLimit from 'express-rate-limit';
 
 
 export const softLimiter = rateLimit({
-    windowMs: 5 * 60 * 1000, // 5 minutes
+    windowMs: 1 * 60 * 1000, // 5 minutes
     max: 20, 
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
