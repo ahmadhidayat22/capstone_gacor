@@ -69,7 +69,7 @@ const getUser = async(req, res) => {
 }
 
 const Register = async(req, res) => {
-    // TODO : buat handler verify untuk email agar @gmail.com
+   
     const { username , email, password, confPassword }= req.body;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     if(!emailRegex.test(email)) {
@@ -166,7 +166,7 @@ const Login = async(req, res) => { // login with email and password only , modif
         });
     } catch (error) {
         console.error(error);
-        res.status(404).json({error: true,message: "email tidak ditemukan"})
+        res.status(404).json({error: true,message: "username atau email salah"})
     }
 }
 
@@ -314,7 +314,7 @@ const forgotPassword = async(req,res) => {
         }
     })
     if(!user) return res.status(400).json({
-        message: "email tidak ditemukan" 
+        message: "email tidak terdaftar" 
     })
     
     await PasswordReset.destroy({
