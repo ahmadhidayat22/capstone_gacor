@@ -50,7 +50,7 @@ try {
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
-// app.set('trust proxy', true)
+app.set('trust proxy', true)
 app.use(softLimiter);
 app.use(timeout);
 app.use(cors());
