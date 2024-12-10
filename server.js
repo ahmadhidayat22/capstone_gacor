@@ -23,7 +23,7 @@ const __dirname = path.dirname(__filename);
 
 let swaggerDocument = yaml.load('./swagger.yaml');
 const url = process.env.BASE_URL || 'http://localhost:5000'; // Set url 
-swaggerDocument.servers = [{ url: `${url}/api/v1/`, description: 'Stagging api URL' }]
+swaggerDocument.servers = [{ url: `${url}api/v1/`, description: 'Stagging api URL' }]
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -50,7 +50,7 @@ try {
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('trust proxy', true)
+// app.set('trust proxy', true)
 app.use(softLimiter);
 app.use(timeout);
 app.use(cors());

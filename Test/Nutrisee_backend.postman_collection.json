@@ -7,20 +7,6 @@
 	},
 	"item": [
 		{
-			"name": "test base url",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUrl}}",
-					"host": [
-						"{{baseUrl}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Register",
 			"request": {
 				"method": "POST",
@@ -91,7 +77,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \r\n    \"email\": \"q@gmail.com\",\r\n    \"password\": \"123\"\r\n    \r\n}",
+					"raw": "{\r\n    \r\n    \"email\": \"q\",\r\n    \"password\": \"123\"\r\n    \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,6 +93,274 @@
 						"api",
 						"v1",
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get New access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// pm.test(\"token set to environment\", function () {\r",
+							"//     // Parse the response body\r",
+							"//     const response = pm.response.json();\r",
+							"\r",
+							"//     // Check if the response contains an accessToken\r",
+							"//     pm.expect(response).to.have.property(\"accessToken\");\r",
+							"\r",
+							"//     // Set the accessToken to an environment variable\r",
+							"//     pm.environment.set(\"accessToken\", response.accessToken);\r",
+							"\r",
+							"//     // Optional: Log a message for debugging\r",
+							"//     console.log(\"Access token set to environment:\", response.accessToken);\r",
+							"// });\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJQTEdaMEpoNmdHWE9IT1lwIiwidXNlcm5hbWUiOiJxIiwiZW1haWwiOiJxQGdtYWlsLmNvbSIsImlhdCI6MTczMzA2NzQ3OSwiZXhwIjoxNzMzMTUzODc5fQ.LTpru2CMRH5O_QpZEJ-90Vh3kwtMDnTa36R2T5PzJJQ\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Queker oat 200g",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/ahmad/Pictures/foto produk/front_en.4.400.jpg"
+						},
+						{
+							"key": "protein",
+							"value": "14.3",
+							"type": "text"
+						},
+						{
+							"key": "sugar",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "sodium",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "saturatedFat",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "calories",
+							"value": "1.670",
+							"type": "text"
+						},
+						{
+							"key": "fiber",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "estVegetableContain",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "grade",
+							"value": "A",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reset-password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"ahmadnurhidayat271@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/forgot-password",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get product by name",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"le\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/product/search",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"email\": \"ahmadnurhidayat271@gmail.com\"\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "test base url",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}",
+					"host": [
+						"{{baseUrl}}"
 					]
 				}
 			},
@@ -197,141 +451,6 @@
 			"response": []
 		},
 		{
-			"name": "Get All Users",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUrl}}/api/v1/users",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get New access Token",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// pm.test(\"token set to environment\", function () {\r",
-							"//     // Parse the response body\r",
-							"//     const response = pm.response.json();\r",
-							"\r",
-							"//     // Check if the response contains an accessToken\r",
-							"//     pm.expect(response).to.have.property(\"accessToken\");\r",
-							"\r",
-							"//     // Set the accessToken to an environment variable\r",
-							"//     pm.environment.set(\"accessToken\", response.accessToken);\r",
-							"\r",
-							"//     // Optional: Log a message for debugging\r",
-							"//     console.log(\"Access token set to environment:\", response.accessToken);\r",
-							"// });\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {
-					"content-type": true
-				}
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJQTEdaMEpoNmdHWE9IT1lwIiwidXNlcm5hbWUiOiJxIiwiZW1haWwiOiJxQGdtYWlsLmNvbSIsImlhdCI6MTczMzA2NzQ3OSwiZXhwIjoxNzMzMTUzODc5fQ.LTpru2CMRH5O_QpZEJ-90Vh3kwtMDnTa36R2T5PzJJQ\"\r\n}"
-				},
-				"url": {
-					"raw": "{{baseUrl}}/api/v1/token",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"token"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Logout",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJYVk9GZEtLTFFnOTdlNHFsIiwidXNlcm5hbWUiOiJxIiwiZW1haWwiOiJxQGdtYWlsLmNvbSIsImlhdCI6MTczMzQxMzc1OSwiZXhwIjoxNzMzNTAwMTU5fQ.AgG2tv4IAu2wSe_ZTLrO0W7uZuwrKXWzpkFDGyhU3IU\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseUrl}}/api/v1/logout",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"logout"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "get News",
 			"request": {
 				"auth": {
@@ -361,7 +480,7 @@
 			"response": []
 		},
 		{
-			"name": "Add Product",
+			"name": "Get  Product",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -373,8 +492,98 @@
 						}
 					]
 				},
-				"method": "POST",
+				"method": "GET",
 				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get product by userid",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlVEZVVzT2ZjYmk5dWN0SWwiLCJpYXQiOjE3MzM4NDY2MzgsImV4cCI6MTczNDQ1MTQzOH0.rk3vFMaNObPRud0Xx6qWaoCT8gZVuNNtP4kYum_s50E\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"IyJqzS30KcetpQd3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "{{baseUrl}}/api/v1/product",
 					"host": [
