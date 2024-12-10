@@ -8,7 +8,6 @@ const storage = new Storage({
 const bucketName = "product-buckets";
 
 
-
 const getOrCreateBucket = async (bucketName) => {
   const bucket = storage.bucket(bucketName);
   try {
