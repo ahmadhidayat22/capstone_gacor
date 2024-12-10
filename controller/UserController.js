@@ -13,7 +13,7 @@ dotenv.config();
 import HTML_TEMPLATE from '../utils/htmlTemplate.js';
 import { authConfig } from '../config/AuthConfig.js';
 import { TokenUtils } from '../utils/tokenUtils.js';
-const appUrl = process.env.BASE_URL || 'http://localhost:5000';
+const appUrl = process.env.BASE_URL || 'http://localhost:5000/';
 
 const client = new OAuth2Client(authConfig.GOOGLE_CLIENT_ID);
 
@@ -335,7 +335,7 @@ const forgotPassword = async(req,res) => {
     });
 
     
-    const link = `${appUrl}/api/v1/reset-password/${user.id}/${resetToken}`;
+    const link = `${appUrl}api/v1/reset-password/${user.id}/${resetToken}`;
   
     const emailContent = HTML_TEMPLATE(link)
     
