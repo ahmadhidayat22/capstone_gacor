@@ -16,7 +16,7 @@ import {
 
 import { 
     getAllProducts, 
-    getProductByName, 
+    // getProductByName, 
     createProduct,
     getAllProductsbyUserId,
     _deleteProduct
@@ -35,7 +35,7 @@ router.get('/news', verifyToken, fetchNews);
 
 //produk
 router.get('/product/history', verifyToken, getAllProductsbyUserId);
-router.get('/product/:name', verifyToken, getProductByName);
+// router.post('/product/search', verifyToken, getProductByName); // not used
 router.post('/product', verifyToken, upload, createProduct); // 2 middleware
 router.get('/product', verifyToken, getAllProducts);
 

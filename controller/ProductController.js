@@ -29,29 +29,29 @@ const getAllProductsbyUserId = async(req, res) => {
     }
 };
 
+// not used >>>
+// const getProductByName = async (req, res) => {
+//     try {
+//         const userId = req.id;
+//         const { name } = req.body;  
+//         const product = await Product.findAll({
+//             where: {
+//                 // userId: userId,
+//                 name: {
+//                     [Op.like]: `%${name}%`
+//                 }
+//             }
+//         });
 
-const getProductByName = async (req, res) => {
-    try {
-        const userId = req.id;
-        const name = req.params.name;  
-        const product = await Product.findOne({
-            where: {
-                userId: userId,
-                name: {
-                    [Op.like]: `%${name}%`
-                }
-            }
-        });
+//         if (!product) {
+//             return res.status(404).json({ message: 'Product not found or unauthorized' });
+//         }
 
-        if (!product) {
-            return res.status(404).json({ message: 'Product not found or unauthorized' });
-        }
-
-        res.status(200).json(product);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+//         res.status(200).json(product);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 
 const createProduct = async (req, res) => {
     const { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain, grade } = req.body;
@@ -145,7 +145,7 @@ const _deleteProduct = async(req,res) => {
 export{ 
 
     getAllProducts,
-    getProductByName,
+    // getProductByName,
     createProduct,
     getAllProductsbyUserId,
     _deleteProduct

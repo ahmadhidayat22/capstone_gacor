@@ -12,7 +12,7 @@ import swaggerUi from 'swagger-ui-express';
 import yaml from 'yamljs';
 // import rateLimit from 'express-rate-limit';
 import cors from 'cors';
-import { softLimiter } from './middleware/limiter.js';
+import { softLimiter, timeout } from './middleware/limiter.js';
 import  AuditLog  from './utils/auditLog.js';
 import path from 'path'
 import { fileURLToPath } from 'url';
@@ -39,7 +39,7 @@ const syncTable = async() => {
 
 try {
     await db.authenticate();
-    // await syncTable();
+    //await syncTable();
     
     console.log('database Connected')
 } catch (error) {
@@ -50,23 +50,15 @@ try {
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
-// app.set('trust proxy', true)
+app.set('trust proxy', true)
 app.use(softLimiter);
-app.use((req, res, next) => {
-    res.setTimeout(20000, () => { // timeout 20 detik
-      res.status(503).json({ message: "Permintaan timeout. Silakan coba lagi." });
-    });
-    next();
-});
-
+app.use(timeout);
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // app.use(AuditLog);
-
-
-app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req,res) => {
   res.send(" <a href= '/api/docs'>documentation </a>");
