@@ -2,7 +2,7 @@ import Product from '../models/ProductModel.js';
 import { Op } from 'sequelize'; 
 import { upload, deleteFile } from './Upload.js';
 import { nanoid } from 'nanoid';
-
+import { Predict } from './Predict.js';
 const getAllProducts = async (req, res) => {
     try {
         // const id = req.id;
@@ -54,7 +54,7 @@ const getAllProductsbyUserId = async(req, res) => {
 // };
 
 const createProduct = async (req, res) => {
-    const { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain, grade } = req.body;
+    const { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain } = req.body;
 
     // console.log(req.file);
     // if (  !name || !grade ||
@@ -63,7 +63,7 @@ const createProduct = async (req, res) => {
     //     isNaN(estVegetableContain)) {
     //     return res.status(400).json({ message: 'Invalid input: ensure all fields are correctly filled' });
     // }
-    if (  !name || !grade || !protein || !sugar || !sodium || !saturatedFat || !calories || !fiber || !estVegetableContain) {
+    if (  !name ||  !protein || !sugar || !sodium || !saturatedFat || !calories || !fiber || !estVegetableContain ) {
         return res.status(400).json({ message: 'Invalid input: ensure all fields are correctly filled' });
     }
 
@@ -83,6 +83,15 @@ const createProduct = async (req, res) => {
         }
         
         const imageUrl = uploadImage?.url;
+        const predictGrade = await Predict(saturatedFat, sugar, fiber, protein, sodium , estVegetableContain,calories);
+        // console.log(predictGrade);
+
+        if(!predictGrade?.success)
+        {
+            return res.status(400).json(`error: ${predictGrade?.message}`);
+        }
+        const grade = predictGrade?.data[0];
+        
         const id = nanoid(16);
         const newProduct = await Product.create({
             id: id,
@@ -96,7 +105,6 @@ const createProduct = async (req, res) => {
             fiber: fiber,
             estVegetableContain: estVegetableContain,
             grade: grade,
-
             userId: userId, // UserId otomatis dari token
         });
         res.status(201).json({

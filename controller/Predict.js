@@ -11,33 +11,47 @@ const flaskUrl = `${process.env.FLASK_URL}/predict` || "http://localhost:4000/pr
 //     "sodium_100g":0.12,
 //     "fruits-vegetables-nuts-estimate-from-ingredients_100g":45.0,
 //     "energy_kj":1050
-export const Predict = async (req, res) => {
-  const {
-    saturatedFat,
-    sugar,
-    fiber,
-    proteins,
-    sodium,
-    fruitsVegetable,
-    energy,
-  } = req.body;
-  const isValidNumber = (value) => typeof value === "number" && !isNaN(value);
+export const Predict = async (
+  saturatedFat,
+  sugar,
+  fiber,
+  proteins,
+  sodium,
+  fruitsVegetable,
+  calories) => {
+  // const {
+  //   saturatedFat,
+  //   sugar,
+  //   fiber,
+  //   proteins,
+  //   sodium,
+  //   fruitsVegetable,
+  //   calories,
+  // } = req.body;
+  // const isValidNumber = (value) => typeof value === "number" && !isNaN(value);
 
   // console.log(req.body);
   try {
-    if (
-      !isValidNumber(saturatedFat) ||
-      !isValidNumber(sugar) ||
-      !isValidNumber(fiber) ||
-      !isValidNumber(proteins) ||
-      !isValidNumber(sodium) ||
-      !isValidNumber(fruitsVegetable) ||
-      !isValidNumber(energy)
-    ) {
-      return res.status(400).json({
-        success: "false",
+    // if (
+    //   !isValidNumber(saturatedFat) ||
+    //   !isValidNumber(sugar) ||
+    //   !isValidNumber(fiber) ||
+    //   !isValidNumber(proteins) ||
+    //   !isValidNumber(sodium) ||
+    //   !isValidNumber(fruitsVegetable) ||
+    //   !isValidNumber(calories)
+    // ) {
+    //   return res.status(400).json({
+    //     success: "false",
+    //     message: "Invalid input: all fields must be valid numbers",
+    //   });
+    // }
+
+    if(!saturatedFat || !sugar || !fiber || !proteins || !sodium || !fruitsVegetable || !calories) {
+      return {
+        success: false,
         message: "Invalid input: all fields must be valid numbers",
-      });
+      };
     }
     let bodyFormData = new FormData();
     bodyFormData.append("saturated-fat_100g", saturatedFat);
@@ -49,33 +63,30 @@ export const Predict = async (req, res) => {
       "fruits-vegetables-nuts-estimate-from-ingredients_100g",
       fruitsVegetable
     );
-    bodyFormData.append("energy_kj", energy);
+    bodyFormData.append("energy_kj", calories);
 
     console.log("Sending request to Flask API, Url: ", flaskUrl);
 
-    await axios({
+    const results = await axios({
       method: "post",
       url: flaskUrl,
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
-    })
-      .then(async (results) => {
-        res.json({
-          success: true,
-          data: results.data, // Mengembalikan data dari Flask API
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).json({
-          success: false,
-          message: "An error occurred while processing the prediction",
-        //   error: err.message, // Menambahkan pesan error spesifik untuk debugging
-        });
-      });
+    });
+    console.log("Results from model: ", results.data);
+    return {
+      success: true,
+      data: results.data, // Data dari Flask API
+      message: "Prediction successful",
+    };
+
   } catch (error) {
     console.error("error: ", error)
-    await res.status(500).json({message: "gagal predict data"})
+    return {
+      success: false,
+      message: "An error occurred while processing the prediction",
+      error: error.message, // Menambahkan pesan error spesifik untuk debugging
+    };
 }
 
   // res.send('ok')
