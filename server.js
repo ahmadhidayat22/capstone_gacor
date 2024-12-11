@@ -27,7 +27,7 @@ swaggerDocument.servers = [{ url: `${url}api/v1/`, description: 'Stagging api UR
 
 const app = express();
 const port = process.env.PORT || 8080;
-app.set('trust proxy', 1);
+//app.set('trust proxy', 1);
 
 const syncTable = async() => {
     await Users.sync(); // nyalakan code ini untuk membuat tabel di db, kemudian matikan

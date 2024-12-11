@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Users from "../models/UserModel.js";
 import PasswordReset from '../models/PasswordReset.js';

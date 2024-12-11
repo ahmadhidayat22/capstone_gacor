@@ -19,9 +19,9 @@ import {
     // getProductByName, 
     createProduct,
     getAllProductsbyUserId,
-    _deleteProduct
+    _deleteProduct,
 } from '../controller/ProductController.js';
-
+import { Predict } from '../controller/Predict.js';
 import { verifyToken } from '../middleware/VerifyToken.js';
 import { refreshToken } from '../controller/RefreshToken.js';
 import { fetchNews } from '../controller/NewsController.js';
@@ -56,6 +56,7 @@ router.delete('/logout', logout);
 
 router.get('/verify-google-login', verifyGoogleLogin);
 
+router.post('/predict', Predict)
 
 router.delete('/product', verifyToken, _deleteProduct); // hanya untuk "admin/dev"
 export default router;
