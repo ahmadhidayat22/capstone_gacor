@@ -1,10 +1,14 @@
 import { Storage } from "@google-cloud/storage";
 
-const storage = new Storage({
-  projectId: "nutrisee-441918",
-  keyFilename: "bucket-secret.json",
-});
+const isProduction = process.env.NODE_ENV === "production";
 
+const storage = isProduction
+  ? new Storage() // Production
+  : new Storage({
+      projectId: "nutrisee-441918",
+      keyFilename: "bucket-secret.json", // Lokal
+    });
+    
 const bucketName = "product-buckets";
 
 

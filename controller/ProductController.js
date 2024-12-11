@@ -71,6 +71,11 @@ const createProduct = async (req, res) => {
     // console.log(userId);
     
     try {
+        const existingProduct = await Product.findOne({ where: { name: name } });
+        if (existingProduct) {
+            return res.status(400).json({ message: 'Product with this name already exists' });
+        }
+
         const uploadImage = await upload(req.file).then((uploadImage) => {
             return uploadImage;
         }).catch((error) => {

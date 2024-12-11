@@ -56,7 +56,7 @@ router.delete('/logout', logout);
 
 router.get('/verify-google-login', verifyGoogleLogin);
 
-router.post('/predict', Predict)
+// router.post('/predict', Predict)
 
 router.delete('/product', verifyToken, _deleteProduct); // hanya untuk "admin/dev"
 export default router;
