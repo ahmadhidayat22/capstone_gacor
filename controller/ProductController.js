@@ -63,7 +63,7 @@ const createProduct = async (req, res) => {
         });
         if(uploadImage?.success === false || uploadImage?.url === null) {
             console.error('Failed to upload image: ', uploadImage.message);
-            return res.status(400).json({ message: 'Failed to upload image' });
+            return await res.status(400).json({ message: 'Failed to upload image' });
         }
         
         const imageUrl = uploadImage?.url;
@@ -72,7 +72,7 @@ const createProduct = async (req, res) => {
 
         if(!predictGrade?.success)
         {
-            return res.status(400).json(`error: ${predictGrade?.message}`);
+            return await res.status(400).json(`error: ${predictGrade?.message}`);
         }
         const grade = predictGrade?.data[0];
         
@@ -91,7 +91,7 @@ const createProduct = async (req, res) => {
             grade: grade,
             userId: userId, // UserId otomatis dari token
         });
-        res.status(201).json({
+       return res.status(201).json({
             message: 'Product created successfully',
             product: newProduct
         });
@@ -101,7 +101,7 @@ const createProduct = async (req, res) => {
         // });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
