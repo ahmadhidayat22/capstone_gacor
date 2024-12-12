@@ -31,7 +31,7 @@ const getAllProductsbyUserId = async(req, res) => {
 
 
 const createProduct = async (req, res) => {
-    const { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain } = req.body;
+    let { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain } = req.body;
 
     // console.log(req.file);
     // if (  !name || !grade ||
@@ -43,6 +43,8 @@ const createProduct = async (req, res) => {
     if (  !name ||  !protein || !sugar || !sodium || !saturatedFat || !calories || !fiber || !estVegetableContain || !req.file) {
         return res.status(400).json({ message: 'Invalid input: ensure all fields are correctly filled' });
     }
+    sodium = sodium/1000;
+//    return console.log(sodium)
     const userId = req.id;  // Mendapatkan userId dari token
     // console.log(userId);
     

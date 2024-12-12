@@ -36,7 +36,7 @@ router.get('/news', verifyToken, fetchNews);
 //produk
 router.get('/product/history', verifyToken, getAllProductsbyUserId);
 // router.post('/product/search', verifyToken, getProductByName); // not used
-router.post('/product', verifyToken, upload, createProduct); // 2 middleware
+router.post('/product', upload, createProduct); // 2 middleware
 router.get('/product', verifyToken, getAllProducts);
 
 router.get('/users',verifyToken, getUser);

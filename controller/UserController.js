@@ -453,11 +453,11 @@ const resetPassword = async(req,res) => {
                 userId: id
             }
         })
-        return res.status(200).json({ 
-            error: false,
-            message : 'password berhasil diubah' 
-        });
-        // res.render('reset-password', { id, token, error: 'password tidak boleh sama dengan password sebelumnya' });
+        // return res.status(200).json({ 
+        //     error: false,
+        //     message : 'password berhasil diubah' 
+        // });
+        return res.render('reset-password', { id, token, success: 'password berhasil diubah' });
         
     } catch (error) {
         console.error(error);
