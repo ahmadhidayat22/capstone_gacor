@@ -50,8 +50,8 @@ export const Predict = async (
     if(!saturatedFat || !sugar || !fiber || !proteins || !sodium || !fruitsVegetable || !calories) {
       return {
         success: false,
-        message: "Invalid input: all fields must be valid numbers",
-      };
+        message: "Invalid input: all fields must be filled in and numbers",
+      };s
     }
     let bodyFormData = new FormData();
     bodyFormData.append("saturated-fat_100g", saturatedFat);

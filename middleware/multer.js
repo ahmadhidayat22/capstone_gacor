@@ -2,7 +2,7 @@ import multer from 'multer';
 import path from 'path';
 
 const storage = multer.memoryStorage();
-const MAX_FILE_SIZE = 1000000; 
+const MAX_FILE_SIZE = 10 * 1024 * 1024; 
 const upload = multer({
     storage: storage,
     limits: { fileSize: MAX_FILE_SIZE },
@@ -15,7 +15,7 @@ function checkFileType(file, cb) {
     const filetypes = /jpeg|jpg|png/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = filetypes.test(file.mimetype);
-
+    
     if(mimetype && extname) {
         return cb(null, true);
     } else {

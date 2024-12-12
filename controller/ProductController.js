@@ -5,7 +5,6 @@ import { nanoid } from 'nanoid';
 import { Predict } from './Predict.js';
 const getAllProducts = async (req, res) => {
     try {
-        // const id = req.id;
         const products = await Product.findAll();
 
         res.status(200).json(products);
@@ -29,29 +28,7 @@ const getAllProductsbyUserId = async(req, res) => {
     }
 };
 
-// not used >>>
-// const getProductByName = async (req, res) => {
-//     try {
-//         const userId = req.id;
-//         const { name } = req.body;  
-//         const product = await Product.findAll({
-//             where: {
-//                 // userId: userId,
-//                 name: {
-//                     [Op.like]: `%${name}%`
-//                 }
-//             }
-//         });
 
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found or unauthorized' });
-//         }
-
-//         res.status(200).json(product);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
 
 const createProduct = async (req, res) => {
     const { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain } = req.body;
@@ -76,6 +53,8 @@ const createProduct = async (req, res) => {
             return res.status(400).json({ message: 'Product with this name already exists' });
         }
 
+        console.log(req.file);
+        
         const uploadImage = await upload(req.file).then((uploadImage) => {
             return uploadImage;
         }).catch((error) => {
@@ -138,7 +117,14 @@ const _deleteProduct = async(req,res) => {
         })
         if(!filenameProduct) return res.status(404).json({message: 'Product not found'});
         // console.log(filenameProduct);
-        await deleteFile(filenameProduct.image);
+        if(filenameProduct.image !== null){ 
+            await deleteFile(filenameProduct.image)
+        }
+        else{
+            console.log('kolom image berisi null, tetap menghapus product...')
+
+        }
+        // await deleteFile(filenameProduct.image);
         await Product.destroy({
             where: {
                 id: id
