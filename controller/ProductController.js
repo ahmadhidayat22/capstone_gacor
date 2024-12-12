@@ -55,24 +55,19 @@ const createProduct = async (req, res) => {
 
         console.log(req.file);
         
-        const uploadImage = await upload(req.file).then((uploadImage) => {
-            return uploadImage;
-        }).catch((error) => {
-            console.error('Error uploading image: ', error);
-            return error;
-        });
-        if(uploadImage?.success === false || uploadImage?.url === null) {
+        const uploadImage = await upload(req.file)
+        if (!uploadImage.success || !uploadImage.url || !uploadImage) {
             console.error('Failed to upload image: ', uploadImage.message);
-            return await res.status(400).json({ message: 'Failed to upload image' });
-        }
-        
-        const imageUrl = uploadImage?.url;
+            return res.status(400).json({ message: 'Failed to upload image' });
+          }
+      
+        const imageUrl = uploadImage.url;
         const predictGrade = await Predict(saturatedFat, sugar, fiber, protein, sodium , estVegetableContain,calories);
         // console.log(predictGrade);
 
         if(!predictGrade?.success)
         {
-            return await res.status(400).json(`error: ${predictGrade?.message}`);
+            return res.status(400).json(`error: ${predictGrade?.message}`);
         }
         const grade = predictGrade?.data[0];
         
@@ -101,7 +96,9 @@ const createProduct = async (req, res) => {
         // });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: error.message });
+        if (!res.headersSent) {
+            return res.status(500).json({ message: error.message });
+          }
     }
 };
 

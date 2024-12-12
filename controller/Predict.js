@@ -19,33 +19,9 @@ export const Predict = async (
   sodium,
   fruitsVegetable,
   calories) => {
-  // const {
-  //   saturatedFat,
-  //   sugar,
-  //   fiber,
-  //   proteins,
-  //   sodium,
-  //   fruitsVegetable,
-  //   calories,
-  // } = req.body;
-  // const isValidNumber = (value) => typeof value === "number" && !isNaN(value);
 
-  // console.log(req.body);
   try {
-    // if (
-    //   !isValidNumber(saturatedFat) ||
-    //   !isValidNumber(sugar) ||
-    //   !isValidNumber(fiber) ||
-    //   !isValidNumber(proteins) ||
-    //   !isValidNumber(sodium) ||
-    //   !isValidNumber(fruitsVegetable) ||
-    //   !isValidNumber(calories)
-    // ) {
-    //   return res.status(400).json({
-    //     success: "false",
-    //     message: "Invalid input: all fields must be valid numbers",
-    //   });
-    // }
+  
 
     if(!saturatedFat || !sugar || !fiber || !proteins || !sodium || !fruitsVegetable || !calories) {
       return {
