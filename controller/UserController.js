@@ -376,7 +376,7 @@ const getResetPassword = async(req,res) => {
 
     }
 
-    res.render('reset-password', { id, token, error: null });
+    res.render('reset-password', { id, token, success:false,error: null });
 
 
 }
@@ -387,7 +387,7 @@ const resetPassword = async(req,res) => {
     // console.log(req.params, req.body)
     if(password !== password2) {
         // return res.status(400).json({message: "password dan konfirmasi password tidak sama"});
-        return res.render('reset-password', { id, token, error: 'password dan konfirmasi password tidak sama' });
+        return res.render('reset-password', { id, token,success:false, error: 'password dan konfirmasi password tidak sama' });
     
     }
 
@@ -401,7 +401,7 @@ const resetPassword = async(req,res) => {
         if(user.password === password) {
 
             // return res.status(400).json({message: "password tidak boleh sama dengan password sebelumnya"});
-            return res.render('reset-password', { id, token, error: 'password tidak boleh sama dengan password sebelumnya' });
+            return res.render('reset-password', { id, token,success:false, error: 'password tidak boleh sama dengan password sebelumnya' });
 
         }
         if(!user){
@@ -461,7 +461,7 @@ const resetPassword = async(req,res) => {
         
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Gagal mengubah password' }); 
+        res.status(500).json({success:false, message: 'Gagal mengubah password' }); 
     }
 }
 
