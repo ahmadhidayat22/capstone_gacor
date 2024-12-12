@@ -40,10 +40,9 @@ const createProduct = async (req, res) => {
     //     isNaN(estVegetableContain)) {
     //     return res.status(400).json({ message: 'Invalid input: ensure all fields are correctly filled' });
     // }
-    if (  !name ||  !protein || !sugar || !sodium || !saturatedFat || !calories || !fiber || !estVegetableContain ) {
+    if (  !name ||  !protein || !sugar || !sodium || !saturatedFat || !calories || !fiber || !estVegetableContain || !req.file) {
         return res.status(400).json({ message: 'Invalid input: ensure all fields are correctly filled' });
     }
-
     const userId = req.id;  // Mendapatkan userId dari token
     // console.log(userId);
     
