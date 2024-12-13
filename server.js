@@ -20,6 +20,7 @@ import { fileURLToPath } from 'url';
 // Definisikan __dirname secara manual
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const BLACKLIST = process.env.BLACKLIST ? process.env.BLACKLIST.split(',') : []; // Baca dari env vars
 
 let swaggerDocument = yaml.load('./swagger.yaml');
 const url = process.env.BASE_URL || 'http://localhost:5000'; // Set url 
@@ -58,16 +59,22 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use(AuditLog);
-
-app.get('/', (req,res) => {
-  res.send(" <a href= '/api/docs'>documentation </a>");
-})
+app.use(AuditLog);
+app.use((req, res, next) => {
+    const clientIp = req.ip;
+    if (BLACKLIST.includes(clientIp)) {
+        return res.status(403).send('Forbidden');
+    }
+    next();
+});
+// app.get('/', (req,res) => {
+//   res.send(" <a href= '/api/docs'>documentation </a>");
+// })
 app.get('/not-found', (req,res) => {
     res.render('404');
 })
 app.use("/api/v1/",router)
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 app.listen(port, () => {
