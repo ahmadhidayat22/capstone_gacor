@@ -31,7 +31,7 @@ const getAllProductsbyUserId = async(req, res) => {
 
 
 const createProduct = async (req, res) => {
-    const { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain } = req.body;
+    let { name, image, protein, sugar, sodium, saturatedFat, calories, fiber, estVegetableContain } = req.body;
 
     // console.log(req.file);
     // if (  !name || !grade ||
@@ -52,6 +52,8 @@ const createProduct = async (req, res) => {
         if (existingProduct) {
             return res.status(400).json({ message: 'Product with this name already exists' });
         }
+
+        sodium = sodium / 1000;
 
         console.log(req.file);
         

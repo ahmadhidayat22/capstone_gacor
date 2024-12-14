@@ -41,7 +41,7 @@ export const Predict = async (
     );
     bodyFormData.append("energy_kj", calories);
 
-    console.log("Sending request to Flask API, Url: ", flaskUrl);
+    console.log("Sending request to Flask API...");
 
     const results = await axios({
       method: "post",
