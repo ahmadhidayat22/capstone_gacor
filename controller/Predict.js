@@ -29,6 +29,7 @@ export const Predict = async (
         message: "Invalid input: all fields must be filled in and numbers",
       };s
     }
+    sodium = sodium / 1000;
     let bodyFormData = new FormData();
     bodyFormData.append("saturated-fat_100g", saturatedFat);
     bodyFormData.append("sugar_100g", sugar);

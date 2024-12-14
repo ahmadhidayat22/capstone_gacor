@@ -53,7 +53,6 @@ const createProduct = async (req, res) => {
             return res.status(400).json({ message: 'Product with this name already exists' });
         }
 
-        sodium = sodium / 1000;
 
         console.log(req.file);
         
